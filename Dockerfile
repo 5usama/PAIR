@@ -12,7 +12,8 @@ WORKDIR /usr/src/app
 
 COPY package.json .
 
-RUN npm install && npm install -g qrcode-terminal pm2
+RUN npm install && npm cache clean --force
+RUN npm install -g qrcode-terminal pm2 && npm cache clean --force
 
 COPY . .
 
