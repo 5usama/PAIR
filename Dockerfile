@@ -1,26 +1,25 @@
-FROM node:lts-buster
+FROM node:lts-bookworm
 
-# Install necessary packages
+# Install required packages
 RUN apt-get update && \
   apt-get install -y \
   ffmpeg \
   imagemagick \
   libwebp-dev && \
-  apt-get upgrade -y && \
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy package info and install dependencies
+# Install app dependencies
 COPY package.json .
-
 RUN npm install && npm install -g qrcode-terminal pm2
 
-# Copy rest of the project files
+# Copy app source
 COPY . .
 
-# Expose port if needed
+# Expose the port (optional)
 EXPOSE 5000
 
 # Start the app
