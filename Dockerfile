@@ -1,22 +1,20 @@
-FROM node:lts-bookworm
+# 1. Use Node.js base image
+FROM node:18
 
-RUN apt-get update && \
-  apt-get install -y \
-  ffmpeg \
-  imagemagick \
-  webp && \
-  apt-get upgrade -y && \
-  apt-get clean && rm -rf /var/lib/apt/lists/*
+# 2. Create and set working directory
+WORKDIR /app
 
-WORKDIR /usr/src/app
+# 3. Copy package.json and install dependencies
+COPY package*.json ./
 
-COPY package.json .
+# 4. Install only necessary packages (no -g install needed for pm2)
+RUN npm install
 
-RUN npm install && npm cache clean --force
-RUN npm install -g qrcode-terminal pm2 && npm cache clean --force
-
+# 5. Copy the rest of your bot's source code
 COPY . .
 
-EXPOSE 5000
+# 6. Expose port if needed (only if using express, optional)
+# EXPOSE 3000
 
+# 7. Start the app using npm start (defined in package.json)
 CMD ["npm", "start"]
