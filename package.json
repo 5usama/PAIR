@@ -9,7 +9,7 @@
     "restart": "pm2 restart MANU-MD"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "github:nstar-y/bail",
+    "@whiskeysockets/baileys": "npm:manu-xmd",
     "jimp": "^0.22.10",
     "@adiwajshing/keyed-db": "^0.2.4",
     "qrcode": "^1.5.3",
