@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /app
 
 # Copy only necessary files for install
-COPY package.json package-lock.json ./
+COPY package.json
 
 # Install node modules locally (outside Docker) first
 # Here, skip prepare scripts inside Docker by using `--ignore-scripts`
