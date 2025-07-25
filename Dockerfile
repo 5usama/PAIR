@@ -1,20 +1,24 @@
-# 1. Use Node.js base image
-FROM node:18
+# Use Node base image
+FROM node:20
 
-# 2. Create and set working directory
+# Set working directory
 WORKDIR /app
 
-# 3. Copy package.json and install dependencies
-COPY package*.json ./
+# Copy only necessary files for install
+COPY package.json package-lock.json ./
 
-# 4. Install only necessary packages (no -g install needed for pm2)
-RUN npm install
+# Install node modules locally (outside Docker) first
+# Here, skip prepare scripts inside Docker by using `--ignore-scripts`
+RUN npm install --ignore-scripts && npm cache clean --force
 
-# 5. Copy the rest of your bot's source code
+# Now copy rest of your code
 COPY . .
 
-# 6. Expose port if needed (only if using express, optional)
-# EXPOSE 3000
+# Optional: manually run prepare after copying source if needed
+# RUN npm run prepare
 
-# 7. Start the app using npm start (defined in package.json)
+# Expose port if needed (optional)
+EXPOSE 3000
+
+# Run app
 CMD ["npm", "start"]
