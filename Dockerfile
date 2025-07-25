@@ -1,24 +1,21 @@
-# Use Node base image
-FROM node:20
+FROM node:lts-buster
 
-# Set working directory
-WORKDIR /app
+RUN apt-get update && \
+  apt-get install -y \
+  ffmpeg \
+  imagemagick \
+  webp && \
+  apt-get upgrade -y && \
+  rm -rf /var/lib/apt/lists/*
+  
+WORKDIR /usr/src/app
 
-# Copy only necessary files for install
-COPY package.json
+COPY package.json .
 
-# Install node modules locally (outside Docker) first
-# Here, skip prepare scripts inside Docker by using `--ignore-scripts`
-RUN npm install --ignore-scripts && npm cache clean --force
+RUN npm install && npm install -g qrcode-terminal pm2
 
-# Now copy rest of your code
 COPY . .
 
-# Optional: manually run prepare after copying source if needed
-# RUN npm run prepare
+EXPOSE 5000
 
-# Expose port if needed (optional)
-EXPOSE 3000
-
-# Run app
 CMD ["npm", "start"]
